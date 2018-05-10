@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RereshLayout</string>
+    <string name="header_hint_normal">下拉以刷新</string>
+    <string name="header_last_time">上次更新：</string>
+</resources>
