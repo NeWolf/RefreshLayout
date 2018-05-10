@@ -10,6 +10,5 @@
 app/libs/
 gradle.properties
 gradle/
-gradlew
-gradlew.bat
+
 
