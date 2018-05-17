@@ -9,9 +9,9 @@ import android.view.View;
  *
  * @author : NeWolf
  * @version : 1.0
- * @date :  2018/5/9
+ * date :  2018/5/9
  * 描述:
- * 历史:<br/>
+ * 历史:
  * ================================================
  */
 public abstract class BaseHeaderAdapter {
@@ -26,7 +26,7 @@ public abstract class BaseHeaderAdapter {
     /**
      * 获取headerView
      *
-     * @return
+     * @return View HeaderView
      */
     public abstract View getHeaderView();
 

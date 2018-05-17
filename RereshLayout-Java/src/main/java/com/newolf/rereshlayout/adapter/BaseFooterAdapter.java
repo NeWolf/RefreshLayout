@@ -9,9 +9,9 @@ import android.view.View;
  *
  * @author : NeWolf
  * @version : 1.0
- * @date :  2018/5/9
+ * date :  2018/5/9
  * 描述:
- * 历史:<br/>
+ * 历史:
  * ================================================
  */
 public abstract class BaseFooterAdapter {
@@ -25,21 +25,21 @@ public abstract class BaseFooterAdapter {
     /**
      * 获取底部 View
      *
-     * @return View
+     * @return View 获取底部 View
      */
     public abstract View getFooterView();
 
     /**
      * 上拉加载更多
      *
-     * @param distY
+     * @param distY 位移Y
      */
     public abstract void pullViewToLoadMore(int distY);
 
     /**
      * 松开开始加载更多
      *
-     * @param distY
+     * @param distY 位移Y
      */
     public abstract void releaseViewToLoadMore(int distY);
 

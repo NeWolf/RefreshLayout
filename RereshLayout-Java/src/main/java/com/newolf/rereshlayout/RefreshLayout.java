@@ -30,9 +30,9 @@ import com.newolf.rereshlayout.utils.MeasureTools;
  *
  * @author : NeWolf
  * @version : 1.0
- * @date :  2018/5/8
+ * date :  2018/5/8
  * 描述: 一个支持ListView , RecycleView ,ScrollView  的下拉刷新和加载更多 以及 WebView 下拉刷新的容器
- * 历史:<br/>
+ * 历史:
  * ================================================
  */
 public class RefreshLayout extends LinearLayout {

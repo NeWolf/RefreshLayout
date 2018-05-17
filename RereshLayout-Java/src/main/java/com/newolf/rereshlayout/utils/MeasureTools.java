@@ -8,9 +8,9 @@ import android.view.ViewGroup;
  *
  * @author : NeWolf
  * @version : 1.0
- * @date :  2018/5/9
+ * date :  2018/5/9
  * 描述:
- * 历史:<br/>
+ * 历史:
  * ================================================
  */
 public class MeasureTools {
