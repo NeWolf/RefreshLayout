@@ -20,8 +20,8 @@ android:
 before_install:
     - yes | $ANDROID_HOME/tools/bin/sdkmanager "build-tools;27.0.2"
 
-script:
-  - ./gradlew build connectedCheck --infolanguage: android
+#script:
+#  - ./gradlew build connectedCheck --infolanguage: android
 
 #jdk: oraclejdk8
 #sudo: false
@@ -40,6 +40,6 @@ script:
 #  # Hack to accept Android licenses
 #  - yes | sdkmanager "platforms;android-27"
 #
-#script:
-#  - ./gradlew assembleRelease
+script:
+  - ./gradlew assembleRelease
 #
