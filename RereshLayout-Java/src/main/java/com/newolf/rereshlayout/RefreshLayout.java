@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -91,9 +90,9 @@ public class RefreshLayout extends LinearLayout {
     }
 
 
-    public void setBaseHeaderAdapter() {
+    public void setBaseHeaderAdapter(String tag) {
         if (mBaseHeaderAdapter == null) {
-            mBaseHeaderAdapter = new DefaultHeaderAdapter(mContext);
+            mBaseHeaderAdapter = new DefaultHeaderAdapter(mContext, tag);
         }
         initHeaderView();
         initSubViewType();
@@ -193,9 +192,9 @@ public class RefreshLayout extends LinearLayout {
                 break;
             case MotionEvent.ACTION_MOVE:
                 int distY = y - mLastY;
-                Log.e(TAG, "onInterceptTouchEvent :\tdistY = " + distY);
+//                Log.e(TAG, "onInterceptTouchEvent :\tdistY = " + distY);
                 if (Math.abs(distY) > mTouchSlop && isParentViewScroll(distY)) {
-                    Log.e(TAG, "onInterceptTouchEvent: belong to ParentView  distY = " + distY);
+//                    Log.e(TAG, "onInterceptTouchEvent: belong to ParentView  distY = " + distY);
                     return true; //此时,触发当前onTouchEvent事件
                 }
                 break;
@@ -233,9 +232,12 @@ public class RefreshLayout extends LinearLayout {
                     belongToParentView = true;
                 }
             }
-        } else if (mRecyclerView != null) {
+        }
+
+        if (mRecyclerView != null) {
+            View child = mRecyclerView.getChildAt(0);
             if (distY > 0) {
-                View child = mRecyclerView.getChildAt(0);
+
                 if (child == null) {
                     belongToParentView = false;
                 }
@@ -245,13 +247,20 @@ public class RefreshLayout extends LinearLayout {
                     mPullState = PULL_DOWN_STATE;
                     belongToParentView = true;
                 }
-            } else if (mRecyclerView.computeVerticalScrollExtent() + mRecyclerView.computeHorizontalScrollOffset() >= mRecyclerView.computeHorizontalScrollRange()) {
+            } else {
+                if (child == null) {
+                    belongToParentView = false;
+                }
 
-                mPullState = PULL_UP_STATE;
-                belongToParentView = true;
+                if (mRecyclerView.computeVerticalScrollExtent() + mRecyclerView.computeVerticalScrollOffset()
+                        >= mRecyclerView.computeVerticalScrollRange()) {
+                    mPullState = PULL_UP_STATE;
+                    belongToParentView = true;
+                }
             }
 
-        } else if (mScrollView != null) {
+        }
+        if (mScrollView != null) {
 
             View child = mScrollView.getChildAt(0);
             if (distY > 0) {
@@ -301,9 +310,9 @@ public class RefreshLayout extends LinearLayout {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 int distY = y - mLastY;
-                Log.e(TAG, "onTouchEvent: distY==" + distY);
+//                Log.e(TAG, "onTouchEvent: distY==" + distY);
                 if (mPullState == PULL_DOWN_STATE) {
-                    Log.e(TAG, "onTouchEvent: pull down begin--> " + distY);
+//                    Log.e(TAG, "onTouchEvent: pull down begin--> " + distY);
                     initHeaderViewToRefresh(distY);
                 } else if (mPullState == PULL_UP_STATE) {
                     initFooterViewToLoadMore(distY);
@@ -314,7 +323,7 @@ public class RefreshLayout extends LinearLayout {
             case MotionEvent.ACTION_CANCEL:
                 performClick();
                 int topMargin = getHeaderTopMargin();
-                Log.e(TAG, "onTouchEvent: topMargin==" + topMargin);
+//                Log.e(TAG, "onTouchEvent: topMargin==" + topMargin);
                 if (mPullState == PULL_DOWN_STATE) {
                     if (topMargin >= 0) {
                         headerRefreshing();
@@ -436,7 +445,7 @@ public class RefreshLayout extends LinearLayout {
 
         int topDistance = updateHeadViewMarginTop(distY);
 
-        Log.e(TAG, "the distance  is " + topDistance);
+//        Log.e(TAG, "the distance  is " + topDistance);
 
         // 如果header view topMargin 的绝对值大于或等于(header + footer) 四分之一 的高度
         // 说明footer view 完全显示出来了，修改footer view 的提示状态

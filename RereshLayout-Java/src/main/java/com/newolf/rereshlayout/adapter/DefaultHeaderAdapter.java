@@ -26,6 +26,7 @@ public class DefaultHeaderAdapter extends BaseHeaderAdapter {
 
     public static final String spName = "time";
     public static final String LAST_TIME = "last_time";
+    public static final String SPACE = ":";
     private ImageView mIvArrow;
     private TextView mTvState;
     private TextView mTvTime;
@@ -34,10 +35,13 @@ public class DefaultHeaderAdapter extends BaseHeaderAdapter {
     private long ROTATE_ANIM_DURATION = 300;
     private View mHeaderView;
     private SharedPreferences sp;
+    private String mTag;
+    public static final String REGEX = "-";
 
-    public DefaultHeaderAdapter(Context context) {
+    public DefaultHeaderAdapter(Context context, String tag) {
         super(context);
-        sp=context.getApplicationContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        sp = context.getApplicationContext().getSharedPreferences(spName, Context.MODE_PRIVATE);
+        mTag = tag;
     }
 
     @Override
@@ -92,12 +96,23 @@ public class DefaultHeaderAdapter extends BaseHeaderAdapter {
     }
 
     private long getLastTime() {
-        long spLong = sp.getLong(LAST_TIME, 0);
-        return spLong == 0 ? System.currentTimeMillis() :spLong;
+        String tags = sp.getString(LAST_TIME, "");
+        long time = 0;
+
+        if (tags.contains(mTag)){
+            String[] split = tags.split(REGEX);
+            for (int i = 0; i < split.length; i++) {
+                if (split[i].contains(mTag)){
+                    time =Long.parseLong(split[i].substring(split[i].indexOf(SPACE)+1));
+                    break;
+                }
+            }
+        }
+        return time == 0 ? System.currentTimeMillis() : time;
     }
 
 
-    public  String friendlyTime(Date time) {
+    public String friendlyTime(Date time) {
         //获取time距离当前的秒数
         int ct = (int) ((System.currentTimeMillis() - time.getTime()) / 1000);
 
@@ -124,7 +139,22 @@ public class DefaultHeaderAdapter extends BaseHeaderAdapter {
         return ct / 31104000 + "年前";
     }
 
-    private  void savaTime(long time) {
-        sp.edit().putLong(LAST_TIME, time).apply();
+    private void savaTime(long time) {
+        String tags = sp.getString(LAST_TIME, "");
+
+        if (tags.contains(mTag)) {
+            String[] split = tags.split(REGEX);
+            for (int i = 0; i < split.length; i++) {
+                if (split[i].contains(mTag)){
+                    tags = tags.replace(split[i],mTag + SPACE + time + REGEX);
+                    break;
+                }
+            }
+        } else {
+            tags = tags + mTag + SPACE + time +REGEX;
+        }
+        sp.edit().putString(LAST_TIME, tags).apply();
     }
+
+
 }
