@@ -1,7 +1,8 @@
 package com.newolf.rereshlayout.utils;
 
-import android.support.annotation.IntDef;
 import android.util.Log;
+
+import androidx.annotation.IntDef;
 
 import org.json.JSONArray;
 import org.json.JSONException;

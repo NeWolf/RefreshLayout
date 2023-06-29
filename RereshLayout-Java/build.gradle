@@ -1,38 +1,56 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.NeWolf'
-//apply plugin: 'com.novoda.bintray-release'
+
+
 android {
-    compileSdkVersion 27
-
-
+    compileSdkVersion 30
+    buildToolsVersion '30.0.1'
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 27
-        versionCode 200
-        versionName "2.0.0"
+        targetSdkVersion 30
+        versionCode 300
+        versionName '3.0.0'
+        buildConfigField "String", "VERSION_NAME", "\"${versionName}\""
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'consumer-rules.pro'
+        }
+        debug {
+            consumerProguardFiles 'proguard-rules.pro'
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
+//    dataBinding {
+//        enabled = true
+//    }
+}
+
+// 打包源码jar
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    archiveClassifier = 'sources'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api 'com.android.support:appcompat-v7:27.1.0'
+//    api 'com.android.support:appcompat-v7:27.1.0'
+    compileOnly 'androidx.appcompat:appcompat:1.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    api 'com.android.support:recyclerview-v7:27.1.0'
+//    api 'com.android.support:recyclerview-v7:27.1.0'
+
+    def recyclerview_version = ""
+
+    compileOnly 'androidx.recyclerview:recyclerview:1.1.0'
 }
 
-apply from: "../bintrayUpload.gradle"
+//apply from: "../bintrayUpload.gradle"
