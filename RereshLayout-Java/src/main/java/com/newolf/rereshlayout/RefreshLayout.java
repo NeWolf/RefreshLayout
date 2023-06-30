@@ -16,8 +16,10 @@ import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.newolf.rereshlayout.adapter.BaseFooterAdapter;
 import com.newolf.rereshlayout.adapter.BaseHeaderAdapter;
@@ -25,6 +27,7 @@ import com.newolf.rereshlayout.adapter.DefaultFooterAdapter;
 import com.newolf.rereshlayout.adapter.DefaultHeaderAdapter;
 import com.newolf.rereshlayout.interfaces.OnFooterLoadMoreListener;
 import com.newolf.rereshlayout.interfaces.OnHeaderRefreshListener;
+import com.newolf.rereshlayout.utils.LogUtils;
 import com.newolf.rereshlayout.utils.MeasureTools;
 
 /**
@@ -244,8 +247,25 @@ public class RefreshLayout extends LinearLayout {
                 if (child == null) {
                     belongToParentView = false;
                 }
-                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-                int firstPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                int firstPosition = -1;
+                RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+                if (layoutManager instanceof GridLayoutManager) {
+                    GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+                    firstPosition = gridLayoutManager.findFirstVisibleItemPosition() / gridLayoutManager.getSpanCount();
+                } else if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                    firstPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                    StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+                    int[] into = new int[staggeredGridLayoutManager.getSpanCount()];
+                    int[] result = staggeredGridLayoutManager.findFirstVisibleItemPositions(into);
+                    firstPosition = result[0];
+                } else {
+                    firstPosition = 1;
+                    LogUtils.e("Not support layoutManager");
+                }
+
+
                 if (firstPosition == 0) {
                     mPullState = PULL_DOWN_STATE;
                     belongToParentView = true;
