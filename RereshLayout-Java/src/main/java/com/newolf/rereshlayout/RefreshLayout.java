@@ -249,21 +249,25 @@ public class RefreshLayout extends LinearLayout {
                 }
                 int firstPosition = -1;
                 RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-                if (layoutManager instanceof GridLayoutManager) {
-                    GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-                    firstPosition = gridLayoutManager.findFirstVisibleItemPosition() / gridLayoutManager.getSpanCount();
-                } else if (layoutManager instanceof LinearLayoutManager) {
-                    LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
-                    firstPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-                } else if (layoutManager instanceof StaggeredGridLayoutManager) {
-                    StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
-                    int[] into = new int[staggeredGridLayoutManager.getSpanCount()];
-                    int[] result = staggeredGridLayoutManager.findFirstVisibleItemPositions(into);
-                    firstPosition = result[0];
-                } else {
-                    firstPosition = 1;
-                    LogUtils.e("Not support layoutManager");
+                if (!mRecyclerView.canScrollVertically(-1)) {
+                    if (layoutManager instanceof GridLayoutManager) {
+                        GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+                        firstPosition = gridLayoutManager.findFirstVisibleItemPosition() / gridLayoutManager.getSpanCount();
+                    } else if (layoutManager instanceof LinearLayoutManager) {
+                        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) layoutManager;
+                        firstPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                    } else if (layoutManager instanceof StaggeredGridLayoutManager) {
+                        StaggeredGridLayoutManager staggeredGridLayoutManager = (StaggeredGridLayoutManager) layoutManager;
+                        int[] into = new int[staggeredGridLayoutManager.getSpanCount()];
+                        int[] result = staggeredGridLayoutManager.findFirstVisibleItemPositions(into);
+                        firstPosition = result[0];
+                    } else {
+                        firstPosition = 1;
+                        LogUtils.e("Not support layoutManager");
+                    }
+
                 }
+
 
 
                 if (firstPosition == 0) {

@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_margin="20dp"
               android:background="@color/colorAccent"
-              android:layout_height="100dp">
+              android:layout_height="wrap_content">
 
 
     <TextView
@@ -12,8 +12,8 @@
         android:layout_width="match_parent"
         android:text="test"
         android:gravity="center"
-        android:textSize="50dp"
+        android:textSize="30dp"
         android:textStyle="bold"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

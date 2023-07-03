@@ -1,6 +1,9 @@
 package com.newolf.refreshlayout.adapter;
 
 
+import android.util.Log;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 
 
@@ -29,5 +32,12 @@ public class TestAdapter   extends BaseQuickAdapter<String, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         helper.setText(R.id.tv_show, item);
+
+        TextView tvShow = helper.getView(R.id.tv_show);
+
+        int h = (int) ((Math.random() * 9 + 1) * 100);
+        tvShow.setHeight(h);
+//        tvShow.requestLayout();
+        Log.wtf("wolf", "convert: h = " + h  + " , position = " + helper.getPosition());
     }
 }

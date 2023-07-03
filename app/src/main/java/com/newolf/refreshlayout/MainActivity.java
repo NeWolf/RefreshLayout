@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.newolf.refreshlayout.adapter.TestAdapter;
 import com.newolf.rereshlayout.RefreshLayout;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         mRefreshLayout.setBaseHeaderAdapter(getClass().getSimpleName());
         mRefreshLayout.setBaseFooterAdapter();
         RecyclerView rvList = findViewById(R.id.rv_list);
-        rvList.setLayoutManager(new LinearLayoutManager(this));
+        rvList.setLayoutManager(new StaggeredGridLayoutManager(2,RecyclerView.VERTICAL));
 
         mTestAdapter = new TestAdapter(null);
         rvList.setAdapter(mTestAdapter);
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Thread.sleep(500);
             if (page == 1) {
-                for (int i = 1; i < 11; i++) {
+                for (int i = 1; i < 21; i++) {
                     data.add("Item :" + i);
                 }
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 mTestAdapter.setNewData(data);
             } else {
                 data.clear();
-                for (int i = (page - 1) * 10 + 1; i < page * 10 + 1; i++) {
+                for (int i = (page - 1) * 20 + 1; i < page * 10 + 1; i++) {
                     data.add("Item :" + i);
                 }
                 mRefreshLayout.onLoadMoreComplete();
