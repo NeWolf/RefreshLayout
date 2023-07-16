@@ -29,8 +29,10 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
     private ImageView mIvArrow;
     private TextView mTvState;
     private TextView mTvTime;
+    private ImageView mIvLoading;
     private RotateAnimation mRotateUpAnim;
     private RotateAnimation mRotateDownAnim;
+    private RotateAnimation mRotateAnim;
     private long ROTATE_ANIM_DURATION = 500;
     private View mHeaderView;
     private SharedPreferences sp;
@@ -50,6 +52,7 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
             mIvArrow = mHeaderView.findViewById(R.id.iv_arrow);
             mTvState = mHeaderView.findViewById(R.id.tv_state);
             mTvTime = mHeaderView.findViewById(R.id.tv_time);
+            mIvLoading = mHeaderView.findViewById(R.id.iv_loading);
 
             mRotateUpAnim = new RotateAnimation(-0.0f, -180.0f,
                     Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -61,6 +64,13 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
                     0.5f);
             mRotateDownAnim.setDuration(ROTATE_ANIM_DURATION);
             mRotateDownAnim.setFillAfter(true);
+
+            mRotateAnim = new RotateAnimation(0.0f, 355,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f);
+            mRotateAnim.setDuration(ROTATE_ANIM_DURATION);
+            mRotateAnim.setFillAfter(true);
+            mRotateAnim.setRepeatCount(60); // 30s
         }
 
 
@@ -69,7 +79,11 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
 
     @Override
     public void pullViewToRefresh(int distY) {
+        mIvLoading.clearAnimation();
+        mIvLoading.setVisibility(View.INVISIBLE);
+
         mIvArrow.clearAnimation();
+        mIvArrow.setVisibility(View.INVISIBLE);
         mIvArrow.startAnimation(mRotateDownAnim);
         mTvState.setText("下拉以刷新");
         mTvTime.setText(friendlyTime(new Date(getLastTime())));
@@ -84,11 +98,20 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
 
     @Override
     public void headerRefreshing() {
+        mIvArrow.clearAnimation();
+        mIvArrow.setVisibility(View.INVISIBLE);
+
+        mIvLoading.clearAnimation();
+        mIvLoading.setVisibility(View.VISIBLE);
+        mIvLoading.startAnimation(mRotateAnim);
         mTvState.setText("更新中...");
     }
 
     @Override
     public void headerRefreshComplete() {
+        mIvArrow.clearAnimation();
+        mIvLoading.clearAnimation();
+
         mTvState.setText("刷新完成");
         savaTime(System.currentTimeMillis());
         mTvTime.setText(friendlyTime(new Date(getLastTime())));
