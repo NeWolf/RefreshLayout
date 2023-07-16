@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 19
         targetSdkVersion 30
-        versionCode 320
-        versionName '3.2.0'
+        versionCode 400
+        versionName '4.0.0'
         buildConfigField "String", "VERSION_NAME", "\"${versionName}\""
 
         consumerProguardFiles "consumer-rules.pro"

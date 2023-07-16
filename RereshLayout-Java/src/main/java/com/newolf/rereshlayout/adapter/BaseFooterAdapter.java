@@ -49,8 +49,13 @@ public abstract class BaseFooterAdapter {
     public abstract void loadingMore();
 
     /**
-     * 加载完成
+     * 加载更多完成
+     * @param noMoreData true：没有更多数据了，之后将不再触发加载更多,如果有全部加载完成的view false：还有更多的数据
      */
-    public abstract void loadMoreComplete();
+    public abstract void loadMoreComplete(boolean noMoreData);
+
+    public void loadMoreComplete(){
+        loadMoreComplete(false);
+    };
 
 }

@@ -73,6 +73,7 @@ public class RefreshLayout extends LinearLayout {
     private OnFooterLoadMoreListener mOnFooterLoadMoreListener;
     private OnHeaderRefreshListener mOnHeaderRefreshListener;
     private int mFooterState;
+    private boolean mNoMoreData;
 
     public RefreshLayout(Context context) {
         super(context);
@@ -132,12 +133,13 @@ public class RefreshLayout extends LinearLayout {
         mHeaderState = PULL_TO_REFRESH;
     }
 
-    public void onLoadMoreComplete() {
+    public void onLoadMoreComplete(boolean noMoreData) {
+        mNoMoreData = noMoreData;
         if (mBaseFooterAdapter == null) {
             return;
         }
         reSetHeaderTopMargin(-mHeaderViewMeasuredHeight);
-        mBaseFooterAdapter.loadMoreComplete();
+        mBaseFooterAdapter.loadMoreComplete(noMoreData);
         mFooterState = PULL_TO_REFRESH;
     }
 
@@ -243,7 +245,6 @@ public class RefreshLayout extends LinearLayout {
         if (mRecyclerView != null) {
             View child = mRecyclerView.getChildAt(0);
             if (distY > 0) {
-
                 if (child == null) {
                     belongToParentView = false;
                 }
@@ -262,7 +263,7 @@ public class RefreshLayout extends LinearLayout {
                         int[] result = staggeredGridLayoutManager.findFirstVisibleItemPositions(into);
                         firstPosition = result[0];
                     } else {
-                        firstPosition = 1;
+                        firstPosition = -2;
                         LogUtils.e("Not support layoutManager");
                     }
 
@@ -381,6 +382,12 @@ public class RefreshLayout extends LinearLayout {
         int top = mHeaderViewMeasuredHeight + mFooterViewMeasuredHeight;
         setHeaderTopMargin(-top);
         mBaseFooterAdapter.loadingMore();
+        if (mNoMoreData){
+            reSetHeaderTopMargin(-mHeaderViewMeasuredHeight);
+            mBaseFooterAdapter.loadMoreComplete(true);
+            mFooterState = PULL_TO_REFRESH;
+            return;
+        }
         if (mOnFooterLoadMoreListener != null) {
             mOnFooterLoadMoreListener.onLoadMore(this);
         }

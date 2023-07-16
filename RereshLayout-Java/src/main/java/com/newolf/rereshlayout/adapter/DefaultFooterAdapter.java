@@ -50,7 +50,14 @@ public class DefaultFooterAdapter extends BaseFooterAdapter {
     }
 
     @Override
-    public void loadMoreComplete() {
-        mTvState.setText("加载完成");
+    public void loadMoreComplete(boolean noMoreData) {
+        if (noMoreData) {
+            mTvState.setText("已经到底啦");
+        } else {
+            mTvState.setText("加载完成");
+        }
+
     }
+
+
 }
