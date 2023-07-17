@@ -1,5 +1,6 @@
 package com.newolf.refreshlayout;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,12 +33,21 @@ public class MainActivity extends AppCompatActivity {
         initListener();
     }
 
+    @SuppressLint("ResourceAsColor")
     private void initView() {
         mRefreshLayout = findViewById(R.id.refreshLayout);
 //        mRefreshLayout.setBaseHeaderAdapter(getClass().getSimpleName());
-        mRefreshLayout.setBaseHeaderAdapter(new DefaultBlackStyleHeaderAdapter(getApplicationContext(),getClass().getSimpleName()));
+        DefaultBlackStyleHeaderAdapter headerAdapter = new DefaultBlackStyleHeaderAdapter(getApplicationContext(), getClass().getSimpleName());
+
+        mRefreshLayout.setBaseHeaderAdapter(headerAdapter);
+        headerAdapter.setBackgroundColor(R.color.colorPrimary);
+        headerAdapter.setTextColor(R.color.colorAccent);
 //        mRefreshLayout.setBaseFooterAdapter();
-        mRefreshLayout.setBaseFooterAdapter(new DefaultBlackStyleFootAdapter(getApplicationContext()));
+        DefaultBlackStyleFootAdapter footAdapter = new DefaultBlackStyleFootAdapter(getApplicationContext());
+
+        mRefreshLayout.setBaseFooterAdapter(footAdapter);
+        footAdapter.setBackgroundColor(R.color.colorPrimary);
+        footAdapter.setTextColor(R.color.colorAccent);
         RecyclerView rvList = findViewById(R.id.rv_list);
         rvList.setLayoutManager(new StaggeredGridLayoutManager(2, RecyclerView.VERTICAL));
 

@@ -6,7 +6,11 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 
 import com.newolf.rereshlayout.R;
 
@@ -29,7 +33,9 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
     private ImageView mIvArrow;
     private TextView mTvState;
     private TextView mTvTime;
+    private TextView mTvLastUpdate;
     private ImageView mIvLoading;
+    private LinearLayout mllHeader;
     private RotateAnimation mRotateUpAnim;
     private RotateAnimation mRotateDownAnim;
     private RotateAnimation mRotateAnim;
@@ -38,6 +44,11 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
     private SharedPreferences sp;
     private String mTag;
     public static final String REGEX = "-";
+
+    private @ColorRes
+    int bgColorRes = -1;
+    private @ColorRes
+    int textColorRes = -1;
 
     public DefaultBlackStyleHeaderAdapter(Context context, String tag) {
         super(context);
@@ -49,9 +60,20 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
     public View getHeaderView() {
         if (mHeaderView == null) {
             mHeaderView = mInflater.inflate(R.layout.adpater_default_black_style_header, null, false);
+            mllHeader = mHeaderView.findViewById(R.id.ll_refresh_header);
+            if (bgColorRes != -1) {
+                mllHeader.setBackgroundColor(mllHeader.getContext().getResources().getColor(bgColorRes));
+
+            }
             mIvArrow = mHeaderView.findViewById(R.id.iv_arrow);
             mTvState = mHeaderView.findViewById(R.id.tv_state);
             mTvTime = mHeaderView.findViewById(R.id.tv_time);
+            mTvLastUpdate = mHeaderView.findViewById(R.id.tv_last_update);
+            if (textColorRes != -1) {
+                mTvState.setTextColor(mTvState.getContext().getResources().getColor(textColorRes));
+                mTvLastUpdate.setTextColor(mTvLastUpdate.getContext().getResources().getColor(textColorRes));
+                mTvTime.setTextColor(mTvTime.getContext().getResources().getColor(textColorRes));
+            }
             mIvLoading = mHeaderView.findViewById(R.id.iv_loading);
 
             mRotateUpAnim = new RotateAnimation(-0.0f, -180.0f,
@@ -121,11 +143,11 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
         String tags = sp.getString(LAST_TIME, "");
         long time = 0;
 
-        if (tags.contains(mTag)){
+        if (tags.contains(mTag)) {
             String[] split = tags.split(REGEX);
             for (int i = 0; i < split.length; i++) {
-                if (split[i].contains(mTag)){
-                    time =Long.parseLong(split[i].substring(split[i].indexOf(SPACE)+1));
+                if (split[i].contains(mTag)) {
+                    time = Long.parseLong(split[i].substring(split[i].indexOf(SPACE) + 1));
                     break;
                 }
             }
@@ -167,15 +189,33 @@ public class DefaultBlackStyleHeaderAdapter extends BaseHeaderAdapter {
         if (tags.contains(mTag)) {
             String[] split = tags.split(REGEX);
             for (int i = 0; i < split.length; i++) {
-                if (split[i].contains(mTag)){
-                    tags = tags.replace(split[i],mTag + SPACE + time + REGEX);
+                if (split[i].contains(mTag)) {
+                    tags = tags.replace(split[i], mTag + SPACE + time + REGEX);
                     break;
                 }
             }
         } else {
-            tags = tags + mTag + SPACE + time +REGEX;
+            tags = tags + mTag + SPACE + time + REGEX;
         }
         sp.edit().putString(LAST_TIME, tags).apply();
+    }
+
+    public void setBackgroundColor(@ColorRes int colorRes) {
+        if (mllHeader != null) {
+            mllHeader.setBackgroundColor(mllHeader.getContext().getResources().getColor(colorRes));
+        }
+    }
+
+    public void setTextColor(@ColorRes int colorRes) {
+        if (mTvState != null) {
+            mTvState.setTextColor(mTvState.getContext().getResources().getColor(colorRes));
+        }
+        if (mTvLastUpdate != null) {
+            mTvLastUpdate.setTextColor(mTvLastUpdate.getContext().getResources().getColor(colorRes));
+        }
+        if (mTvTime != null) {
+            mTvTime.setTextColor(mTvTime.getContext().getResources().getColor(colorRes));
+        }
     }
 
 

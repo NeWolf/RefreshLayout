@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/ll_footer"
     android:background="@color/color_refresh_010101"
     android:gravity="center"
     android:orientation="horizontal"
